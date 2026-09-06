@@ -11,10 +11,40 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-4 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-dropdown title="Inventory" :active="request()->routeIs(['products.*', 'categories.*', 'units.*', 'warehouses.*', 'stock-transfers.*', 'stock-adjustments.*', 'stock-movements.*'])">
+                        <x-dropdown-link :href="route('products.index')">{{ __('Products') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('categories.index')">{{ __('Categories') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('units.index')">{{ __('Units') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('warehouses.index')">{{ __('Warehouses') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('stock-transfers.index')">{{ __('Stock Transfers') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('stock-adjustments.index')">{{ __('Stock Adjustments') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('stock-movements.index')">{{ __('Stock Ledger') }}</x-dropdown-link>
+                    </x-nav-dropdown>
+
+                    <x-nav-dropdown title="Purchasing" :active="request()->routeIs(['purchase-orders.*', 'suppliers.*'])">
+                        <x-dropdown-link :href="route('purchase-orders.index')">{{ __('Purchase Orders') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('suppliers.index')">{{ __('Suppliers') }}</x-dropdown-link>
+                    </x-nav-dropdown>
+
+                    <x-nav-dropdown title="Sales" :active="request()->routeIs(['sales-orders.*', 'customers.*'])">
+                        <x-dropdown-link :href="route('sales-orders.index')">{{ __('Sales Orders') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('customers.index')">{{ __('Customers') }}</x-dropdown-link>
+                    </x-nav-dropdown>
+
+                    <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
+                        {{ __('Invoices') }}
+                    </x-nav-link>
+
+                    @role('Admin')
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
@@ -70,6 +100,31 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Inventory') }}</div>
+            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">{{ __('Products') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">{{ __('Categories') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('units.index')" :active="request()->routeIs('units.*')">{{ __('Units') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('warehouses.index')" :active="request()->routeIs('warehouses.*')">{{ __('Warehouses') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('stock-transfers.index')" :active="request()->routeIs('stock-transfers.*')">{{ __('Stock Transfers') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('stock-adjustments.index')" :active="request()->routeIs('stock-adjustments.*')">{{ __('Stock Adjustments') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('stock-movements.index')" :active="request()->routeIs('stock-movements.*')">{{ __('Stock Ledger') }}</x-responsive-nav-link>
+
+            <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Purchasing') }}</div>
+            <x-responsive-nav-link :href="route('purchase-orders.index')" :active="request()->routeIs('purchase-orders.*')">{{ __('Purchase Orders') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.*')">{{ __('Suppliers') }}</x-responsive-nav-link>
+
+            <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Sales') }}</div>
+            <x-responsive-nav-link :href="route('sales-orders.index')" :active="request()->routeIs('sales-orders.*')">{{ __('Sales Orders') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">{{ __('Customers') }}</x-responsive-nav-link>
+
+            <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Finance') }}</div>
+            <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">{{ __('Invoices') }}</x-responsive-nav-link>
+
+            @role('Admin')
+                <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Admin') }}</div>
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">{{ __('Users') }}</x-responsive-nav-link>
+            @endrole
         </div>
 
         <!-- Responsive Settings Options -->
