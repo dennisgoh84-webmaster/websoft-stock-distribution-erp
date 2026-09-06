@@ -18,6 +18,8 @@ class StockMovement extends Model
 
     public const TYPE_ADJUSTMENT = 'adjustment';
 
+    public const TYPE_INITIAL = 'initial';
+
     protected $fillable = [
         'product_id',
         'warehouse_id',
@@ -38,6 +40,7 @@ class StockMovement extends Model
             self::TYPE_TRANSFER_IN => 'Transfer In',
             self::TYPE_TRANSFER_OUT => 'Transfer Out',
             self::TYPE_ADJUSTMENT => 'Stock Adjustment',
+            self::TYPE_INITIAL => 'Initial Stock',
         ];
     }
 
