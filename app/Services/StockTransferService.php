@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\StockMovement;
 use App\Models\StockTransfer;
+use App\Models\StockTransferItem;
 use App\Support\DocumentNumber;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -25,20 +26,28 @@ class StockTransferService
             throw new RuntimeException('A stock transfer needs at least one item.');
         }
 
-        return DB::transaction(function () use ($attributes, $items, $userId) {
+        // Generated before the transaction below opens — see
+        // App\Support\DocumentNumber on why that matters for speed.
+        $transferNumber = DocumentNumber::generate('stock_transfer', 'TRF');
+
+        return DB::transaction(function () use ($attributes, $items, $userId, $transferNumber) {
             $transfer = StockTransfer::create([
                 ...$attributes,
-                'transfer_number' => DocumentNumber::generate('stock_transfer', 'TRF'),
+                'transfer_number' => $transferNumber,
                 'user_id' => $userId,
                 'status' => StockTransfer::STATUS_PENDING,
             ]);
 
-            foreach ($items as $item) {
-                $transfer->items()->create([
+            $now = now();
+            StockTransferItem::insert(
+                collect($items)->map(fn ($item) => [
+                    'stock_transfer_id' => $transfer->id,
                     'product_id' => $item['product_id'],
                     'quantity' => $item['quantity'],
-                ]);
-            }
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ])->all()
+            );
 
             return $this->complete($transfer, $userId);
         });

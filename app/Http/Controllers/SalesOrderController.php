@@ -50,11 +50,17 @@ class SalesOrderController extends Controller
             'items.*.unit_price' => ['required', 'numeric', 'min:0'],
         ]);
 
-        $salesOrder = DB::transaction(function () use ($data) {
+        // Generated before the transaction below opens: on the locked-table
+        // fallback (non-Postgres), that keeps the sequence row's lock held
+        // for only this tiny increment instead of for the whole order
+        // creation. See App\Support\DocumentNumber.
+        $soNumber = DocumentNumber::generate('sales_order', 'SO');
+
+        $salesOrder = DB::transaction(function () use ($data, $soNumber) {
             $subtotal = collect($data['items'])->sum(fn ($item) => $item['quantity'] * $item['unit_price']);
 
             $salesOrder = SalesOrder::create([
-                'so_number' => DocumentNumber::generate('sales_order', 'SO'),
+                'so_number' => $soNumber,
                 'customer_id' => $data['customer_id'],
                 'warehouse_id' => $data['warehouse_id'],
                 'user_id' => auth()->id(),

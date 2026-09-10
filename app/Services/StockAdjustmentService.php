@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Product;
 use App\Models\StockAdjustment;
+use App\Models\StockAdjustmentItem;
 use App\Models\StockMovement;
 use App\Support\DocumentNumber;
 use Illuminate\Support\Facades\DB;
@@ -23,27 +25,37 @@ class StockAdjustmentService
             throw new RuntimeException('A stock adjustment needs at least one non-zero line.');
         }
 
-        return DB::transaction(function () use ($attributes, $items, $userId) {
+        // Generated before the transaction below opens — see
+        // App\Support\DocumentNumber on why that matters for speed.
+        $adjustmentNumber = DocumentNumber::generate('stock_adjustment', 'ADJ');
+
+        return DB::transaction(function () use ($attributes, $items, $userId, $adjustmentNumber) {
             $adjustment = StockAdjustment::create([
                 ...$attributes,
-                'adjustment_number' => DocumentNumber::generate('stock_adjustment', 'ADJ'),
+                'adjustment_number' => $adjustmentNumber,
                 'user_id' => $userId,
             ]);
 
             $adjustment->loadMissing('warehouse');
 
-            foreach ($items as $item) {
-                $quantityChange = (int) $item['quantity_change'];
+            $products = Product::whereIn('id', collect($items)->pluck('product_id'))->get()->keyBy('id');
 
-                $adjustmentItem = $adjustment->items()->create([
+            $now = now();
+            StockAdjustmentItem::insert(
+                collect($items)->map(fn ($item) => [
+                    'stock_adjustment_id' => $adjustment->id,
                     'product_id' => $item['product_id'],
-                    'quantity_change' => $quantityChange,
-                ]);
+                    'quantity_change' => (int) $item['quantity_change'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ])->all()
+            );
 
+            foreach ($items as $item) {
                 $this->stockService->move(
-                    product: $adjustmentItem->product,
+                    product: $products[$item['product_id']],
                     warehouse: $adjustment->warehouse,
-                    quantity: $quantityChange,
+                    quantity: (int) $item['quantity_change'],
                     type: StockMovement::TYPE_ADJUSTMENT,
                     reference: $adjustment,
                     notes: "{$adjustment->adjustment_number}: {$adjustment->reason}",

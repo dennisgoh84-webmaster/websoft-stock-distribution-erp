@@ -58,7 +58,11 @@ class PurchaseOrderService
                 $item->increment('received_quantity', $qty);
             }
 
-            $purchaseOrder->refresh()->load('items');
+            // Re-eager-load items.product (not just items — refresh() drops
+            // relations, and InvoiceService needs each item's product name)
+            // so createFromPurchaseOrder() below doesn't lazy-load the
+            // product once per line item.
+            $purchaseOrder->refresh()->load('items.product');
             $purchaseOrder->status = $purchaseOrder->isFullyReceived()
                 ? PurchaseOrder::STATUS_RECEIVED
                 : PurchaseOrder::STATUS_PARTIALLY_RECEIVED;

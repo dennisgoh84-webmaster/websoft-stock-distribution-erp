@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Payment;
 use App\Models\PurchaseOrder;
 use App\Models\SalesOrder;
 use App\Support\DocumentNumber;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
@@ -36,15 +38,13 @@ class InvoiceService
 
             $purchaseOrder->invoice()->save($invoice);
 
-            foreach ($purchaseOrder->items as $item) {
-                $invoice->items()->create([
-                    'product_id' => $item->product_id,
-                    'description' => $item->product->name,
-                    'quantity' => $item->quantity,
-                    'unit_price' => $item->unit_cost,
-                    'line_total' => $item->quantity * $item->unit_cost,
-                ]);
-            }
+            $this->bulkInsertItems($invoice, $purchaseOrder->items->map(fn ($item) => [
+                'product_id' => $item->product_id,
+                'description' => $item->product->name,
+                'quantity' => $item->quantity,
+                'unit_price' => $item->unit_cost,
+                'line_total' => $item->quantity * $item->unit_cost,
+            ]));
 
             return $invoice;
         });
@@ -74,15 +74,13 @@ class InvoiceService
 
             $salesOrder->invoice()->save($invoice);
 
-            foreach ($salesOrder->items as $item) {
-                $invoice->items()->create([
-                    'product_id' => $item->product_id,
-                    'description' => $item->product->name,
-                    'quantity' => $item->quantity,
-                    'unit_price' => $item->unit_price,
-                    'line_total' => $item->quantity * $item->unit_price,
-                ]);
-            }
+            $this->bulkInsertItems($invoice, $salesOrder->items->map(fn ($item) => [
+                'product_id' => $item->product_id,
+                'description' => $item->product->name,
+                'quantity' => $item->quantity,
+                'unit_price' => $item->unit_price,
+                'line_total' => $item->quantity * $item->unit_price,
+            ]));
 
             return $invoice;
         });
@@ -128,5 +126,26 @@ class InvoiceService
 
             return $payment;
         });
+    }
+
+    /**
+     * Insert all of an invoice's line items in a single statement instead
+     * of one INSERT per item — the difference between 1 query and N round
+     * trips for an order with N lines, which matters for how fast the
+     * receive/fulfill action that triggers this returns. Bypasses Eloquent
+     * model events for InvoiceItem (it has none), same as any bulk insert.
+     */
+    private function bulkInsertItems(Invoice $invoice, Collection $rows): void
+    {
+        $now = now();
+
+        InvoiceItem::insert(
+            $rows->map(fn (array $row) => [
+                ...$row,
+                'invoice_id' => $invoice->id,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ])->all()
+        );
     }
 }

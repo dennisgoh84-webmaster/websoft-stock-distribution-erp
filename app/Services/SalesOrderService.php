@@ -57,7 +57,11 @@ class SalesOrderService
                 $item->increment('fulfilled_quantity', $qty);
             }
 
-            $salesOrder->refresh()->load('items');
+            // Re-eager-load items.product (not just items — refresh() drops
+            // relations, and InvoiceService needs each item's product name)
+            // so createFromSalesOrder() below doesn't lazy-load the product
+            // once per line item.
+            $salesOrder->refresh()->load('items.product');
             $salesOrder->status = $salesOrder->isFullyFulfilled()
                 ? SalesOrder::STATUS_FULFILLED
                 : SalesOrder::STATUS_PARTIALLY_FULFILLED;

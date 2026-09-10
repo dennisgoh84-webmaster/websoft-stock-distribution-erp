@@ -51,11 +51,17 @@ class PurchaseOrderController extends Controller
             'items.*.unit_cost' => ['required', 'numeric', 'min:0'],
         ]);
 
-        $purchaseOrder = DB::transaction(function () use ($data) {
+        // Generated before the transaction below opens: on the locked-table
+        // fallback (non-Postgres), that keeps the sequence row's lock held
+        // for only this tiny increment instead of for the whole order
+        // creation. See App\Support\DocumentNumber.
+        $poNumber = DocumentNumber::generate('purchase_order', 'PO');
+
+        $purchaseOrder = DB::transaction(function () use ($data, $poNumber) {
             $subtotal = collect($data['items'])->sum(fn ($item) => $item['quantity'] * $item['unit_cost']);
 
             $purchaseOrder = PurchaseOrder::create([
-                'po_number' => DocumentNumber::generate('purchase_order', 'PO'),
+                'po_number' => $poNumber,
                 'supplier_id' => $data['supplier_id'],
                 'warehouse_id' => $data['warehouse_id'],
                 'user_id' => auth()->id(),
