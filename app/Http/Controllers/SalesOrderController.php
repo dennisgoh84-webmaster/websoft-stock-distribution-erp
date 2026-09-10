@@ -54,7 +54,7 @@ class SalesOrderController extends Controller
             $subtotal = collect($data['items'])->sum(fn ($item) => $item['quantity'] * $item['unit_price']);
 
             $salesOrder = SalesOrder::create([
-                'so_number' => DocumentNumber::generate(SalesOrder::class, 'SO'),
+                'so_number' => DocumentNumber::generate('sales_order', 'SO'),
                 'customer_id' => $data['customer_id'],
                 'warehouse_id' => $data['warehouse_id'],
                 'user_id' => auth()->id(),

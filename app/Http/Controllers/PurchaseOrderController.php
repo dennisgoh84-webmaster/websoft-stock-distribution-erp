@@ -55,7 +55,7 @@ class PurchaseOrderController extends Controller
             $subtotal = collect($data['items'])->sum(fn ($item) => $item['quantity'] * $item['unit_cost']);
 
             $purchaseOrder = PurchaseOrder::create([
-                'po_number' => DocumentNumber::generate(PurchaseOrder::class, 'PO'),
+                'po_number' => DocumentNumber::generate('purchase_order', 'PO'),
                 'supplier_id' => $data['supplier_id'],
                 'warehouse_id' => $data['warehouse_id'],
                 'user_id' => auth()->id(),

@@ -26,7 +26,7 @@ class StockAdjustmentService
         return DB::transaction(function () use ($attributes, $items, $userId) {
             $adjustment = StockAdjustment::create([
                 ...$attributes,
-                'adjustment_number' => DocumentNumber::generate(StockAdjustment::class, 'ADJ'),
+                'adjustment_number' => DocumentNumber::generate('stock_adjustment', 'ADJ'),
                 'user_id' => $userId,
             ]);
 

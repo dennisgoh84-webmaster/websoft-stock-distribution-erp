@@ -21,15 +21,21 @@ class PurchaseOrderService
      */
     public function receive(PurchaseOrder $purchaseOrder, array $quantities, ?int $userId = null): PurchaseOrder
     {
-        if (! in_array($purchaseOrder->status, [
-            PurchaseOrder::STATUS_ORDERED,
-            PurchaseOrder::STATUS_PARTIALLY_RECEIVED,
-        ], true)) {
-            throw new RuntimeException('Only ordered or partially received purchase orders can be received.');
-        }
-
         return DB::transaction(function () use ($purchaseOrder, $quantities, $userId) {
+            // Lock the order row for the rest of this transaction: this
+            // serializes concurrent receive() calls against the same PO
+            // (e.g. two staff submitting the receiving form at once) so the
+            // status check below, the item increments, and the final
+            // status/invoice decision all act on a consistent snapshot.
+            $purchaseOrder = PurchaseOrder::whereKey($purchaseOrder->id)->lockForUpdate()->firstOrFail();
             $purchaseOrder->loadMissing('items.product', 'warehouse');
+
+            if (! in_array($purchaseOrder->status, [
+                PurchaseOrder::STATUS_ORDERED,
+                PurchaseOrder::STATUS_PARTIALLY_RECEIVED,
+            ], true)) {
+                throw new RuntimeException('Only ordered or partially received purchase orders can be received.');
+            }
 
             foreach ($purchaseOrder->items as $item) {
                 $requested = (int) ($quantities[$item->id] ?? 0);
@@ -68,12 +74,18 @@ class PurchaseOrderService
 
     public function cancel(PurchaseOrder $purchaseOrder): PurchaseOrder
     {
-        if (! $purchaseOrder->canCancel()) {
-            throw new RuntimeException('This purchase order can no longer be cancelled.');
-        }
+        return DB::transaction(function () use ($purchaseOrder) {
+            // Same lock as receive(): stops a cancel racing a concurrent
+            // receive on the same order.
+            $purchaseOrder = PurchaseOrder::whereKey($purchaseOrder->id)->lockForUpdate()->firstOrFail();
 
-        $purchaseOrder->update(['status' => PurchaseOrder::STATUS_CANCELLED]);
+            if (! $purchaseOrder->canCancel()) {
+                throw new RuntimeException('This purchase order can no longer be cancelled.');
+            }
 
-        return $purchaseOrder;
+            $purchaseOrder->update(['status' => PurchaseOrder::STATUS_CANCELLED]);
+
+            return $purchaseOrder;
+        });
     }
 }

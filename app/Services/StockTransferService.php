@@ -28,7 +28,7 @@ class StockTransferService
         return DB::transaction(function () use ($attributes, $items, $userId) {
             $transfer = StockTransfer::create([
                 ...$attributes,
-                'transfer_number' => DocumentNumber::generate(StockTransfer::class, 'TRF'),
+                'transfer_number' => DocumentNumber::generate('stock_transfer', 'TRF'),
                 'user_id' => $userId,
                 'status' => StockTransfer::STATUS_PENDING,
             ]);

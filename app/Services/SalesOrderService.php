@@ -21,15 +21,20 @@ class SalesOrderService
      */
     public function fulfill(SalesOrder $salesOrder, array $quantities, ?int $userId = null): SalesOrder
     {
-        if (! in_array($salesOrder->status, [
-            SalesOrder::STATUS_CONFIRMED,
-            SalesOrder::STATUS_PARTIALLY_FULFILLED,
-        ], true)) {
-            throw new RuntimeException('Only confirmed or partially fulfilled sales orders can be fulfilled.');
-        }
-
         return DB::transaction(function () use ($salesOrder, $quantities, $userId) {
+            // Lock the order row for the rest of this transaction: this
+            // serializes concurrent fulfill() calls against the same SO so
+            // the status check, item increments, and final status/invoice
+            // decision all act on a consistent snapshot.
+            $salesOrder = SalesOrder::whereKey($salesOrder->id)->lockForUpdate()->firstOrFail();
             $salesOrder->loadMissing('items.product', 'warehouse');
+
+            if (! in_array($salesOrder->status, [
+                SalesOrder::STATUS_CONFIRMED,
+                SalesOrder::STATUS_PARTIALLY_FULFILLED,
+            ], true)) {
+                throw new RuntimeException('Only confirmed or partially fulfilled sales orders can be fulfilled.');
+            }
 
             foreach ($salesOrder->items as $item) {
                 $requested = (int) ($quantities[$item->id] ?? 0);
@@ -68,12 +73,16 @@ class SalesOrderService
 
     public function cancel(SalesOrder $salesOrder): SalesOrder
     {
-        if (! $salesOrder->canCancel()) {
-            throw new RuntimeException('This sales order can no longer be cancelled.');
-        }
+        return DB::transaction(function () use ($salesOrder) {
+            $salesOrder = SalesOrder::whereKey($salesOrder->id)->lockForUpdate()->firstOrFail();
 
-        $salesOrder->update(['status' => SalesOrder::STATUS_CANCELLED]);
+            if (! $salesOrder->canCancel()) {
+                throw new RuntimeException('This sales order can no longer be cancelled.');
+            }
 
-        return $salesOrder;
+            $salesOrder->update(['status' => SalesOrder::STATUS_CANCELLED]);
+
+            return $salesOrder;
+        });
     }
 }

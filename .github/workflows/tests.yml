@@ -15,6 +15,21 @@ jobs:
 
     name: PHP 8.4
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: websoft
+          POSTGRES_PASSWORD: websoft_secret
+          POSTGRES_DB: websoft_erp
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,7 +38,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, pdo_pgsql
           coverage: none
 
       - name: Install Composer dependencies
@@ -35,11 +50,16 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
-      - name: Prepare sqlite database
-        run: touch database/database.sqlite
-
-      - name: Run migrations
+      # Migrating against the real production engine (Postgres) here, on
+      # top of the sqlite-backed unit/feature suite below, catches anything
+      # sqlite's more permissive SQL would silently let slide (this app's
+      # row-locking fixes for concurrent writes only do anything on a real
+      # RDBMS — see README's Concurrency section).
+      - name: Run migrations against Postgres
         run: php artisan migrate --force
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PASSWORD: websoft_secret
 
       - name: Execute tests
         run: vendor/bin/phpunit

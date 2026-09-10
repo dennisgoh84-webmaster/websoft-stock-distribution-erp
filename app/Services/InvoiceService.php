@@ -22,7 +22,7 @@ class InvoiceService
             $subtotal = $purchaseOrder->items->sum(fn ($item) => $item->quantity * $item->unit_cost);
 
             $invoice = Invoice::create([
-                'invoice_number' => DocumentNumber::generate(Invoice::class, 'PINV'),
+                'invoice_number' => DocumentNumber::generate('invoice', 'PINV'),
                 'type' => Invoice::TYPE_PURCHASE,
                 'supplier_id' => $purchaseOrder->supplier_id,
                 'user_id' => $userId,
@@ -60,7 +60,7 @@ class InvoiceService
             $subtotal = $salesOrder->items->sum(fn ($item) => $item->quantity * $item->unit_price);
 
             $invoice = Invoice::create([
-                'invoice_number' => DocumentNumber::generate(Invoice::class, 'SINV'),
+                'invoice_number' => DocumentNumber::generate('invoice', 'SINV'),
                 'type' => Invoice::TYPE_SALES,
                 'customer_id' => $salesOrder->customer_id,
                 'user_id' => $userId,
@@ -91,19 +91,26 @@ class InvoiceService
     public function recordPayment(Invoice $invoice, array $data, ?int $userId = null): Payment
     {
         $amount = (float) $data['amount'];
-        $balance = $invoice->balance();
 
         if ($amount <= 0) {
             throw new RuntimeException('Payment amount must be greater than zero.');
         }
 
-        if ($amount > $balance + 0.001) {
-            throw new RuntimeException("Payment of {$amount} exceeds the outstanding balance of {$balance}.");
-        }
-
         return DB::transaction(function () use ($invoice, $data, $amount, $userId) {
+            // Lock the invoice row before re-checking the balance: without
+            // this, two simultaneous payments could each read the same
+            // stale balance, both pass the overpayment check, and both
+            // commit — over-paying the invoice and corrupting amount_paid
+            // via a lost update.
+            $invoice = Invoice::whereKey($invoice->id)->lockForUpdate()->firstOrFail();
+            $balance = $invoice->balance();
+
+            if ($amount > $balance + 0.001) {
+                throw new RuntimeException("Payment of {$amount} exceeds the outstanding balance of {$balance}.");
+            }
+
             $payment = Payment::create([
-                'payment_number' => DocumentNumber::generate(Payment::class, 'PAY'),
+                'payment_number' => DocumentNumber::generate('payment', 'PAY'),
                 'invoice_id' => $invoice->id,
                 'user_id' => $userId,
                 'amount' => $amount,
