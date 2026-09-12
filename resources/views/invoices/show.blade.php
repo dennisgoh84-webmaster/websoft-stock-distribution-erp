@@ -109,9 +109,52 @@
                 </table>
             </div>
 
+            @if ($invoice->receiptAllocations->isNotEmpty() || $invoice->paymentVoucherAllocations->isNotEmpty())
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="px-6 py-4 border-b border-gray-100 font-semibold text-gray-700">
+                        {{ $invoice->type === 'sales' ? __('Receipts Applied') : __('Payment Vouchers Applied') }}
+                    </div>
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ $invoice->type === 'sales' ? __('Receipt #') : __('Voucher #') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Date') }}</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Amount') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($invoice->type === 'sales' ? $invoice->receiptAllocations : $invoice->paymentVoucherAllocations as $allocation)
+                                <tr>
+                                    <td class="px-6 py-4 text-sm text-gray-900">
+                                        @if ($invoice->type === 'sales')
+                                            <a href="{{ route('receipts.show', $allocation->receipt) }}" class="hover:underline">{{ $allocation->receipt->receipt_number }}</a>
+                                        @else
+                                            <a href="{{ route('payment-vouchers.show', $allocation->paymentVoucher) }}" class="hover:underline">{{ $allocation->paymentVoucher->voucher_number }}</a>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">{{ $allocation->created_at->format('Y-m-d') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900 text-right">{{ number_format($allocation->amount, 2) }}</td>
+                                </tr>
+                            @empty
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
             @if (in_array($invoice->status, [\App\Models\Invoice::STATUS_UNPAID, \App\Models\Invoice::STATUS_PARTIALLY_PAID]))
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="font-semibold text-gray-700 mb-4">{{ __('Record Payment') }}</h3>
+                    <div class="flex justify-between items-baseline mb-4">
+                        <h3 class="font-semibold text-gray-700">{{ __('Record Payment') }}</h3>
+                        <span class="text-xs text-gray-500">
+                            {{ __('Settling this from money already recorded, or across several invoices?') }}
+                            @if ($invoice->type === 'sales')
+                                <a href="{{ route('receipts.index') }}" class="text-indigo-600 hover:underline">{{ __('Use Receipts') }}</a>
+                            @else
+                                <a href="{{ route('payment-vouchers.index') }}" class="text-indigo-600 hover:underline">{{ __('Use Payment Vouchers') }}</a>
+                            @endif
+                        </span>
+                    </div>
                     <form method="POST" action="{{ route('invoices.pay', $invoice) }}" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
                         @csrf
                         <div>

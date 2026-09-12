@@ -26,14 +26,16 @@
                         <x-dropdown-link :href="route('stock-movements.index')">{{ __('Stock Ledger') }}</x-dropdown-link>
                     </x-nav-dropdown>
 
-                    <x-nav-dropdown title="Purchasing" :active="request()->routeIs(['purchase-orders.*', 'suppliers.*'])">
+                    <x-nav-dropdown title="Purchasing" :active="request()->routeIs(['purchase-orders.*', 'suppliers.*', 'payment-vouchers.*'])">
                         <x-dropdown-link :href="route('purchase-orders.index')">{{ __('Purchase Orders') }}</x-dropdown-link>
                         <x-dropdown-link :href="route('suppliers.index')">{{ __('Suppliers') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('payment-vouchers.index')">{{ __('Payment Vouchers') }}</x-dropdown-link>
                     </x-nav-dropdown>
 
-                    <x-nav-dropdown title="Sales" :active="request()->routeIs(['sales-orders.*', 'customers.*'])">
+                    <x-nav-dropdown title="Sales" :active="request()->routeIs(['sales-orders.*', 'customers.*', 'receipts.*'])">
                         <x-dropdown-link :href="route('sales-orders.index')">{{ __('Sales Orders') }}</x-dropdown-link>
                         <x-dropdown-link :href="route('customers.index')">{{ __('Customers') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('receipts.index')">{{ __('Receipts') }}</x-dropdown-link>
                     </x-nav-dropdown>
 
                     <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
@@ -113,10 +115,12 @@
             <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Purchasing') }}</div>
             <x-responsive-nav-link :href="route('purchase-orders.index')" :active="request()->routeIs('purchase-orders.*')">{{ __('Purchase Orders') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.*')">{{ __('Suppliers') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('payment-vouchers.index')" :active="request()->routeIs('payment-vouchers.*')">{{ __('Payment Vouchers') }}</x-responsive-nav-link>
 
             <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Sales') }}</div>
             <x-responsive-nav-link :href="route('sales-orders.index')" :active="request()->routeIs('sales-orders.*')">{{ __('Sales Orders') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">{{ __('Customers') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('receipts.index')" :active="request()->routeIs('receipts.*')">{{ __('Receipts') }}</x-responsive-nav-link>
 
             <div class="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase">{{ __('Finance') }}</div>
             <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">{{ __('Invoices') }}</x-responsive-nav-link>

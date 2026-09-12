@@ -95,19 +95,9 @@ class InvoiceService
         }
 
         return DB::transaction(function () use ($invoice, $data, $amount, $userId) {
-            // Lock the invoice row before re-checking the balance: without
-            // this, two simultaneous payments could each read the same
-            // stale balance, both pass the overpayment check, and both
-            // commit — over-paying the invoice and corrupting amount_paid
-            // via a lost update.
-            $invoice = Invoice::whereKey($invoice->id)->lockForUpdate()->firstOrFail();
-            $balance = $invoice->balance();
+            $invoice = $this->applyAmount($invoice, $amount);
 
-            if ($amount > $balance + 0.001) {
-                throw new RuntimeException("Payment of {$amount} exceeds the outstanding balance of {$balance}.");
-            }
-
-            $payment = Payment::create([
+            return Payment::create([
                 'payment_number' => DocumentNumber::generate('payment', 'PAY'),
                 'invoice_id' => $invoice->id,
                 'user_id' => $userId,
@@ -117,15 +107,39 @@ class InvoiceService
                 'reference_no' => $data['reference_no'] ?? null,
                 'notes' => $data['notes'] ?? null,
             ]);
-
-            $invoice->amount_paid = (float) $invoice->amount_paid + $amount;
-            $invoice->status = $invoice->balance() <= 0.001
-                ? Invoice::STATUS_PAID
-                : Invoice::STATUS_PARTIALLY_PAID;
-            $invoice->save();
-
-            return $payment;
         });
+    }
+
+    /**
+     * Applies an amount to an invoice's amount_paid and recomputes its
+     * status, guarding against overpayment under concurrent callers.
+     * Shared by recordPayment above (one payment, one invoice, in full or
+     * part) and by ReceiptService/PaymentVoucherService's allocate() (a
+     * receipt/voucher recorded independently, knocked off against one or
+     * more invoices). Must be called from within an existing DB
+     * transaction — it does not open its own.
+     */
+    public function applyAmount(Invoice $invoice, float $amount): Invoice
+    {
+        // Lock the invoice row before re-checking the balance: without
+        // this, two simultaneous callers could each read the same stale
+        // balance, both pass the overpayment check, and both commit —
+        // over-paying the invoice and corrupting amount_paid via a lost
+        // update.
+        $invoice = Invoice::whereKey($invoice->id)->lockForUpdate()->firstOrFail();
+        $balance = $invoice->balance();
+
+        if ($amount > $balance + 0.001) {
+            throw new RuntimeException("Amount of {$amount} exceeds the outstanding balance of {$balance}.");
+        }
+
+        $invoice->amount_paid = (float) $invoice->amount_paid + $amount;
+        $invoice->status = $invoice->balance() <= 0.001
+            ? Invoice::STATUS_PAID
+            : Invoice::STATUS_PARTIALLY_PAID;
+        $invoice->save();
+
+        return $invoice;
     }
 
     /**

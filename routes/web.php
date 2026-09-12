@@ -4,9 +4,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentVoucherController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\StockMovementController;
@@ -45,6 +47,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
     Route::post('invoices/{invoice}/pay', [InvoiceController::class, 'pay'])->name('invoices.pay');
+
+    Route::resource('receipts', ReceiptController::class)->only(['index', 'create', 'store', 'show']);
+    Route::post('receipts/{receipt}/allocate', [ReceiptController::class, 'allocate'])->name('receipts.allocate');
+
+    Route::resource('payment-vouchers', PaymentVoucherController::class)->only(['index', 'create', 'store', 'show']);
+    Route::post('payment-vouchers/{payment_voucher}/allocate', [PaymentVoucherController::class, 'allocate'])->name('payment-vouchers.allocate');
 
     Route::middleware('role:Admin')->group(function () {
         Route::get('users', [UserController::class, 'index'])->name('users.index');

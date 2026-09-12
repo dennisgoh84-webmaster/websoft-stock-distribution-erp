@@ -34,6 +34,8 @@ class DocumentNumber
         'stock_adjustment',
         'invoice',
         'payment',
+        'receipt',
+        'payment_voucher',
     ];
 
     public static function generate(string $type, string $prefix): string

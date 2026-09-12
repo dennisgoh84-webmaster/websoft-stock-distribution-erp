@@ -82,6 +82,16 @@ class Invoice extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function receiptAllocations(): HasMany
+    {
+        return $this->hasMany(ReceiptAllocation::class);
+    }
+
+    public function paymentVoucherAllocations(): HasMany
+    {
+        return $this->hasMany(PaymentVoucherAllocation::class);
+    }
+
     public function balance(): float
     {
         return round((float) $this->total - (float) $this->amount_paid, 2);
