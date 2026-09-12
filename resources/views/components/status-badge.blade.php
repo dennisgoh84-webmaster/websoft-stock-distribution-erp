@@ -2,7 +2,7 @@
 
 @php
 $colors = [
-    'draft' => 'bg-gray-100 text-gray-600',
+    'draft' => 'bg-slate-100 text-slate-600',
     'ordered' => 'bg-blue-100 text-blue-800',
     'confirmed' => 'bg-blue-100 text-blue-800',
     'pending' => 'bg-yellow-100 text-yellow-800',
@@ -14,13 +14,13 @@ $colors = [
     'completed' => 'bg-green-100 text-green-800',
     'paid' => 'bg-green-100 text-green-800',
     'unpaid' => 'bg-red-100 text-red-800',
-    'cancelled' => 'bg-gray-100 text-gray-500 line-through',
+    'cancelled' => 'bg-slate-100 text-slate-500 line-through',
     'fully_allocated' => 'bg-green-100 text-green-800',
     'partially_allocated' => 'bg-yellow-100 text-yellow-800',
     'unallocated' => 'bg-red-100 text-red-800',
 ];
 
-$classes = $colors[$status] ?? 'bg-gray-100 text-gray-600';
+$classes = $colors[$status] ?? 'bg-slate-100 text-slate-600';
 @endphp
 
 <span {{ $attributes->merge(['class' => "px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap {$classes}"]) }}>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-slate-900 leading-tight tracking-tight">
             {{ __('Invoice') }} {{ $invoice->invoice_number }}
             <x-status-badge :status="$invoice->status" />
         </h2>
@@ -8,10 +8,10 @@
 
     <div class="py-6">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
-                <div><span class="text-gray-500 block">{{ __('Type') }}</span> {{ str($invoice->type)->title() }}</div>
+            <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl p-6 grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
+                <div><span class="text-slate-500 block">{{ __('Type') }}</span> {{ str($invoice->type)->title() }}</div>
                 <div>
-                    <span class="text-gray-500 block">{{ __('Party') }}</span>
+                    <span class="text-slate-500 block">{{ __('Party') }}</span>
                     @if ($invoice->type === 'sales' && $invoice->customer)
                         <a href="{{ route('customers.show', $invoice->customer) }}" class="hover:underline">{{ $invoice->customer->name }}</a>
                     @elseif ($invoice->supplier)
@@ -20,8 +20,8 @@
                         —
                     @endif
                 </div>
-                <div><span class="text-gray-500 block">{{ __('Invoice Date') }}</span> {{ $invoice->invoice_date->format('Y-m-d') }}</div>
-                <div><span class="text-gray-500 block">{{ __('Due Date') }}</span> {{ $invoice->due_date?->format('Y-m-d') ?? '—' }}</div>
+                <div><span class="text-slate-500 block">{{ __('Invoice Date') }}</span> {{ $invoice->invoice_date->format('Y-m-d') }}</div>
+                <div><span class="text-slate-500 block">{{ __('Due Date') }}</span> {{ $invoice->due_date?->format('Y-m-d') ?? '—' }}</div>
             </div>
 
             @if ($invoice->source)
@@ -35,74 +35,74 @@
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="px-6 py-4 border-b border-gray-100 font-semibold text-gray-700">{{ __('Items') }}</div>
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+                <div class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-700">{{ __('Items') }}</div>
+                <table class="app-table min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Description') }}</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Qty') }}</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Unit Price') }}</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Line Total') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Description') }}</th>
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Qty') }}</th>
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Unit Price') }}</th>
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Line Total') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-slate-200">
                         @foreach ($invoice->items as $item)
                             <tr>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $item->description ?? $item->product?->name }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500 text-right">{{ $item->quantity }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500 text-right">{{ number_format($item->unit_price, 2) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900 text-right">{{ number_format($item->line_total, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">{{ $item->description ?? $item->product?->name }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-500 text-right">{{ $item->quantity }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-500 text-right">{{ number_format($item->unit_price, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-900 text-right">{{ number_format($item->line_total, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
-                        <tr class="border-t bg-gray-50">
-                            <td colspan="3" class="px-6 py-2 text-right text-sm text-gray-500">{{ __('Subtotal') }}</td>
+                        <tr class="border-t bg-slate-50">
+                            <td colspan="3" class="px-6 py-2 text-right text-sm text-slate-500">{{ __('Subtotal') }}</td>
                             <td class="px-6 py-2 text-right text-sm">{{ number_format($invoice->subtotal, 2) }}</td>
                         </tr>
-                        <tr class="bg-gray-50">
-                            <td colspan="3" class="px-6 py-2 text-right text-sm text-gray-500">{{ __('Tax') }}</td>
+                        <tr class="bg-slate-50">
+                            <td colspan="3" class="px-6 py-2 text-right text-sm text-slate-500">{{ __('Tax') }}</td>
                             <td class="px-6 py-2 text-right text-sm">{{ number_format($invoice->tax_amount, 2) }}</td>
                         </tr>
-                        <tr class="bg-gray-50">
-                            <td colspan="3" class="px-6 py-2 text-right text-sm font-semibold text-gray-700">{{ __('Total') }}</td>
+                        <tr class="bg-slate-50">
+                            <td colspan="3" class="px-6 py-2 text-right text-sm font-semibold text-slate-700">{{ __('Total') }}</td>
                             <td class="px-6 py-2 text-right text-sm font-semibold">{{ number_format($invoice->total, 2) }}</td>
                         </tr>
-                        <tr class="bg-gray-50">
-                            <td colspan="3" class="px-6 py-2 text-right text-sm text-gray-500">{{ __('Paid') }}</td>
+                        <tr class="bg-slate-50">
+                            <td colspan="3" class="px-6 py-2 text-right text-sm text-slate-500">{{ __('Paid') }}</td>
                             <td class="px-6 py-2 text-right text-sm">{{ number_format($invoice->amount_paid, 2) }}</td>
                         </tr>
-                        <tr class="bg-gray-50">
-                            <td colspan="3" class="px-6 py-2 text-right text-sm font-semibold text-gray-700">{{ __('Balance Due') }}</td>
+                        <tr class="bg-slate-50">
+                            <td colspan="3" class="px-6 py-2 text-right text-sm font-semibold text-slate-700">{{ __('Balance Due') }}</td>
                             <td class="px-6 py-2 text-right text-sm font-semibold">{{ number_format($invoice->balance(), 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="px-6 py-4 border-b border-gray-100 font-semibold text-gray-700">{{ __('Payments') }}</div>
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+                <div class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-700">{{ __('Payments') }}</div>
+                <table class="app-table min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Payment #') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Date') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Method') }}</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Amount') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Payment #') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Date') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Method') }}</th>
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Amount') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-slate-200">
                         @forelse ($invoice->payments as $payment)
                             <tr>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $payment->payment_number }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">{{ $payment->payment_date->format('Y-m-d') }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">{{ str($payment->method)->replace('_', ' ')->title() }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900 text-right">{{ number_format($payment->amount, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">{{ $payment->payment_number }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-500">{{ $payment->payment_date->format('Y-m-d') }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-500">{{ str($payment->method)->replace('_', ' ')->title() }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-900 text-right">{{ number_format($payment->amount, 2) }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-sm text-gray-500 text-center">{{ __('No payments recorded yet.') }}</td>
+                                <td colspan="4" class="px-6 py-4 text-sm text-slate-500 text-center">{{ __('No payments recorded yet.') }}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -110,30 +110,30 @@
             </div>
 
             @if ($invoice->receiptAllocations->isNotEmpty() || $invoice->paymentVoucherAllocations->isNotEmpty())
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="px-6 py-4 border-b border-gray-100 font-semibold text-gray-700">
+                <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+                    <div class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-700">
                         {{ $invoice->type === 'sales' ? __('Receipts Applied') : __('Payment Vouchers Applied') }}
                     </div>
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                    <table class="app-table min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ $invoice->type === 'sales' ? __('Receipt #') : __('Voucher #') }}</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Date') }}</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Amount') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $invoice->type === 'sales' ? __('Receipt #') : __('Voucher #') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Date') }}</th>
+                                <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Amount') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-slate-200">
                             @forelse ($invoice->type === 'sales' ? $invoice->receiptAllocations : $invoice->paymentVoucherAllocations as $allocation)
                                 <tr>
-                                    <td class="px-6 py-4 text-sm text-gray-900">
+                                    <td class="px-6 py-4 text-sm text-slate-900">
                                         @if ($invoice->type === 'sales')
                                             <a href="{{ route('receipts.show', $allocation->receipt) }}" class="hover:underline">{{ $allocation->receipt->receipt_number }}</a>
                                         @else
                                             <a href="{{ route('payment-vouchers.show', $allocation->paymentVoucher) }}" class="hover:underline">{{ $allocation->paymentVoucher->voucher_number }}</a>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">{{ $allocation->created_at->format('Y-m-d') }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900 text-right">{{ number_format($allocation->amount, 2) }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-500">{{ $allocation->created_at->format('Y-m-d') }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-900 text-right">{{ number_format($allocation->amount, 2) }}</td>
                                 </tr>
                             @empty
                             @endforelse
@@ -143,10 +143,10 @@
             @endif
 
             @if (in_array($invoice->status, [\App\Models\Invoice::STATUS_UNPAID, \App\Models\Invoice::STATUS_PARTIALLY_PAID]))
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl p-6">
                     <div class="flex justify-between items-baseline mb-4">
-                        <h3 class="font-semibold text-gray-700">{{ __('Record Payment') }}</h3>
-                        <span class="text-xs text-gray-500">
+                        <h3 class="font-semibold text-slate-700">{{ __('Record Payment') }}</h3>
+                        <span class="text-xs text-slate-500">
                             {{ __('Settling this from money already recorded, or across several invoices?') }}
                             @if ($invoice->type === 'sales')
                                 <a href="{{ route('receipts.index') }}" class="text-indigo-600 hover:underline">{{ __('Use Receipts') }}</a>
@@ -168,7 +168,7 @@
                         </div>
                         <div>
                             <x-input-label for="method" :value="__('Method')" />
-                            <select id="method" name="method" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <select id="method" name="method" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
                                 <option value="cash">{{ __('Cash') }}</option>
                                 <option value="bank_transfer">{{ __('Bank Transfer') }}</option>
                                 <option value="cheque">{{ __('Cheque') }}</option>

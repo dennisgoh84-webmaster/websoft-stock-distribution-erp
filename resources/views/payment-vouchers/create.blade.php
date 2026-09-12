@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Record Payment Voucher') }}</h2>
+        <h2 class="font-semibold text-xl text-slate-900 leading-tight tracking-tight">{{ __('Record Payment Voucher') }}</h2>
     </x-slot>
 
     <div class="py-6">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <p class="text-sm text-gray-500 mb-6">
+            <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl p-6">
+                <p class="text-sm text-slate-500 mb-6">
                     {{ __('Money paid to a supplier, recorded before deciding which bill(s) it settles. Allocate it on the next screen — a voucher can settle one bill, several, or sit unallocated.') }}
                 </p>
 
@@ -16,7 +16,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <x-input-label for="supplier_id" :value="__('Supplier')" />
-                            <select id="supplier_id" name="supplier_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                            <select id="supplier_id" name="supplier_id" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm" required>
                                 <option value="">{{ __('Select supplier') }}</option>
                                 @foreach ($suppliers as $supplier)
                                     <option value="{{ $supplier->id }}" @selected(old('supplier_id') == $supplier->id)>{{ $supplier->name }}</option>
@@ -39,7 +39,7 @@
 
                         <div>
                             <x-input-label for="method" :value="__('Method')" />
-                            <select id="method" name="method" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <select id="method" name="method" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
                                 <option value="cash">{{ __('Cash') }}</option>
                                 <option value="bank_transfer">{{ __('Bank Transfer') }}</option>
                                 <option value="cheque">{{ __('Cheque') }}</option>
@@ -54,7 +54,7 @@
 
                         <div class="sm:col-span-2">
                             <x-input-label for="notes" :value="__('Notes')" />
-                            <textarea id="notes" name="notes" rows="2" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('notes') }}</textarea>
+                            <textarea id="notes" name="notes" rows="2" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">{{ old('notes') }}</textarea>
                         </div>
                     </div>
 

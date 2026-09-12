@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    /* Subtle row highlight on every data table -- .app-table is added
+       alongside the standard "min-w-full divide-y divide-slate-200"
+       table classes used across every index/show screen. */
+    .app-table tbody tr {
+        @apply transition-colors hover:bg-slate-50;
+    }
+}

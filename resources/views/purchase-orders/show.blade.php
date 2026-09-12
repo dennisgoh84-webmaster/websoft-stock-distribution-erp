@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-slate-900 leading-tight tracking-tight">
                 {{ __('Purchase Order') }} {{ $purchaseOrder->po_number }}
                 <x-status-badge :status="$purchaseOrder->status" />
             </h2>
@@ -16,11 +16,11 @@
 
     <div class="py-6">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
-                <div><span class="text-gray-500 block">{{ __('Supplier') }}</span> <a href="{{ route('suppliers.show', $purchaseOrder->supplier) }}" class="hover:underline">{{ $purchaseOrder->supplier->name }}</a></div>
-                <div><span class="text-gray-500 block">{{ __('Warehouse') }}</span> {{ $purchaseOrder->warehouse->name }}</div>
-                <div><span class="text-gray-500 block">{{ __('Order Date') }}</span> {{ $purchaseOrder->order_date->format('Y-m-d') }}</div>
-                <div><span class="text-gray-500 block">{{ __('Expected Date') }}</span> {{ $purchaseOrder->expected_date?->format('Y-m-d') ?? '—' }}</div>
+            <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl p-6 grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
+                <div><span class="text-slate-500 block">{{ __('Supplier') }}</span> <a href="{{ route('suppliers.show', $purchaseOrder->supplier) }}" class="hover:underline">{{ $purchaseOrder->supplier->name }}</a></div>
+                <div><span class="text-slate-500 block">{{ __('Warehouse') }}</span> {{ $purchaseOrder->warehouse->name }}</div>
+                <div><span class="text-slate-500 block">{{ __('Order Date') }}</span> {{ $purchaseOrder->order_date->format('Y-m-d') }}</div>
+                <div><span class="text-slate-500 block">{{ __('Expected Date') }}</span> {{ $purchaseOrder->expected_date?->format('Y-m-d') ?? '—' }}</div>
             </div>
 
             @if ($purchaseOrder->invoice)
@@ -32,35 +32,35 @@
 
             <form method="POST" action="{{ route('purchase-orders.receive', $purchaseOrder) }}">
                 @csrf
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="px-6 py-4 border-b border-gray-100 font-semibold text-gray-700">{{ __('Items') }}</div>
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+                    <div class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-700">{{ __('Items') }}</div>
+                    <table class="app-table min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Product') }}</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Ordered') }}</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Received') }}</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Unit Cost') }}</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Line Total') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Product') }}</th>
+                                <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Ordered') }}</th>
+                                <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Received') }}</th>
+                                <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Unit Cost') }}</th>
+                                <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ __('Line Total') }}</th>
                                 @if (in_array($purchaseOrder->status, [\App\Models\PurchaseOrder::STATUS_ORDERED, \App\Models\PurchaseOrder::STATUS_PARTIALLY_RECEIVED]))
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase w-32">{{ __('Receive Now') }}</th>
+                                    <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-32">{{ __('Receive Now') }}</th>
                                 @endif
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-slate-200">
                             @foreach ($purchaseOrder->items as $item)
                                 <tr>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $item->product->name }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 text-right">{{ $item->quantity }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 text-right">{{ $item->received_quantity }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 text-right">{{ number_format($item->unit_cost, 2) }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900 text-right">{{ number_format($item->line_total, 2) }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-900">{{ $item->product->name }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-500 text-right">{{ $item->quantity }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-500 text-right">{{ $item->received_quantity }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-500 text-right">{{ number_format($item->unit_cost, 2) }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-900 text-right">{{ number_format($item->line_total, 2) }}</td>
                                     @if (in_array($purchaseOrder->status, [\App\Models\PurchaseOrder::STATUS_ORDERED, \App\Models\PurchaseOrder::STATUS_PARTIALLY_RECEIVED]))
                                         <td class="px-6 py-4 text-right">
                                             @if ($item->remainingQuantity() > 0)
-                                                <input type="number" min="0" max="{{ $item->remainingQuantity() }}" name="quantities[{{ $item->id }}]" value="0" class="w-24 text-right border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                                <input type="number" min="0" max="{{ $item->remainingQuantity() }}" name="quantities[{{ $item->id }}]" value="0" class="w-24 text-right border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-sm">
                                             @else
-                                                <span class="text-xs text-gray-400">{{ __('complete') }}</span>
+                                                <span class="text-xs text-slate-400">{{ __('complete') }}</span>
                                             @endif
                                         </td>
                                     @endif
@@ -68,8 +68,8 @@
                             @endforeach
                         </tbody>
                         <tfoot>
-                            <tr class="border-t bg-gray-50">
-                                <td colspan="4" class="px-6 py-3 text-right text-sm font-semibold text-gray-700">{{ __('Total') }}</td>
+                            <tr class="border-t bg-slate-50">
+                                <td colspan="4" class="px-6 py-3 text-right text-sm font-semibold text-slate-700">{{ __('Total') }}</td>
                                 <td class="px-6 py-3 text-right text-sm font-semibold">{{ number_format($purchaseOrder->total, 2) }}</td>
                                 <td></td>
                             </tr>
@@ -85,8 +85,8 @@
             </form>
 
             @if ($purchaseOrder->notes)
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 text-sm text-gray-600">
-                    <span class="text-gray-500 block mb-1">{{ __('Notes') }}</span>
+                <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl p-6 text-sm text-slate-600">
+                    <span class="text-slate-500 block mb-1">{{ __('Notes') }}</span>
                     {{ $purchaseOrder->notes }}
                 </div>
             @endif

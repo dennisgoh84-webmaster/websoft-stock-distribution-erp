@@ -15,7 +15,7 @@
 
     <div>
         <x-input-label for="category_id" :value="__('Category')" />
-        <select id="category_id" name="category_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+        <select id="category_id" name="category_id" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
             <option value="">{{ __('None') }}</option>
             @foreach ($categories as $category)
                 <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id ?? '') == $category->id)>{{ $category->name }}</option>
@@ -26,7 +26,7 @@
 
     <div>
         <x-input-label for="unit_id" :value="__('Unit')" />
-        <select id="unit_id" name="unit_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+        <select id="unit_id" name="unit_id" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
             <option value="">{{ __('None') }}</option>
             @foreach ($units as $unit)
                 <option value="{{ $unit->id }}" @selected(old('unit_id', $product->unit_id ?? '') == $unit->id)>{{ $unit->name }} ({{ $unit->short_name }})</option>
@@ -51,18 +51,18 @@
         <x-input-label for="reorder_level" :value="__('Reorder Level')" />
         <x-text-input id="reorder_level" name="reorder_level" type="number" min="0" class="mt-1 block w-full" value="{{ old('reorder_level', $product->reorder_level ?? 0) }}" required />
         <x-input-error :messages="$errors->get('reorder_level')" class="mt-2" />
-        <p class="mt-1 text-xs text-gray-500">{{ __('Product is flagged as low stock at or below this quantity.') }}</p>
+        <p class="mt-1 text-xs text-slate-500">{{ __('Product is flagged as low stock at or below this quantity.') }}</p>
     </div>
 </div>
 
 <div>
     <x-input-label for="description" :value="__('Description')" />
-    <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('description', $product->description ?? '') }}</textarea>
+    <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">{{ old('description', $product->description ?? '') }}</textarea>
     <x-input-error :messages="$errors->get('description')" class="mt-2" />
 </div>
 
 <div class="flex items-center">
-    <input id="is_active" name="is_active" type="checkbox" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+    <input id="is_active" name="is_active" type="checkbox" value="1" class="rounded border-slate-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
         {{ old('is_active', $product->is_active ?? true) ? 'checked' : '' }}>
-    <label for="is_active" class="ms-2 text-sm text-gray-600">{{ __('Active') }}</label>
+    <label for="is_active" class="ms-2 text-sm text-slate-600">{{ __('Active') }}</label>
 </div>

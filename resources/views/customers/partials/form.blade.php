@@ -45,7 +45,7 @@
 </div>
 
 <div class="flex items-center">
-    <input id="is_active" name="is_active" type="checkbox" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+    <input id="is_active" name="is_active" type="checkbox" value="1" class="rounded border-slate-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
         {{ old('is_active', $customer->is_active ?? true) ? 'checked' : '' }}>
-    <label for="is_active" class="ms-2 text-sm text-gray-600">{{ __('Active') }}</label>
+    <label for="is_active" class="ms-2 text-sm text-slate-600">{{ __('Active') }}</label>
 </div>
