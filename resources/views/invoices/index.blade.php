@@ -8,7 +8,7 @@
             <form method="GET" class="flex flex-wrap gap-3 items-end bg-white p-4 rounded-lg shadow-sm ring-1 ring-slate-900/5">
                 <div>
                     <x-input-label for="type" :value="__('Type')" />
-                    <select id="type" name="type" class="mt-1 block border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                    <select id="type" name="type" class="mt-1 block border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                         <option value="">{{ __('All') }}</option>
                         <option value="sales" @selected(request('type') === 'sales')>{{ __('Sales') }}</option>
                         <option value="purchase" @selected(request('type') === 'purchase')>{{ __('Purchase') }}</option>
@@ -16,7 +16,7 @@
                 </div>
                 <div>
                     <x-input-label for="status" :value="__('Status')" />
-                    <select id="status" name="status" class="mt-1 block border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                    <select id="status" name="status" class="mt-1 block border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                         <option value="">{{ __('All') }}</option>
                         @foreach (['unpaid', 'partially_paid', 'paid', 'cancelled'] as $status)
                             <option value="{{ $status }}" @selected(request('status') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>

@@ -70,7 +70,7 @@
                             @csrf
                             <div>
                                 <x-input-label for="invoice_id" :value="__('Bill')" />
-                                <select id="invoice_id" name="invoice_id" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm" required>
+                                <select id="invoice_id" name="invoice_id" class="mt-1 block w-full border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm" required>
                                     <option value="">{{ __('Select bill') }}</option>
                                     @foreach ($openInvoices as $invoice)
                                         <option value="{{ $invoice->id }}" @selected(old('invoice_id') == $invoice->id)>

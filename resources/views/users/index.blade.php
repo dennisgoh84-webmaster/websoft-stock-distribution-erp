@@ -25,7 +25,7 @@
                                     <form method="POST" action="{{ route('users.update-role', $user) }}" class="flex justify-end gap-2">
                                         @csrf
                                         @method('PATCH')
-                                        <select name="role" class="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-sm">
+                                        <select name="role" class="border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm text-sm">
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role->name }}" @selected($user->hasRole($role->name))>{{ $role->name }}</option>
                                             @endforeach

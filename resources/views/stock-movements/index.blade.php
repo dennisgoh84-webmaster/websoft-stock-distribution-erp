@@ -8,7 +8,7 @@
             <form method="GET" class="flex flex-wrap gap-3 items-end bg-white p-4 rounded-lg shadow-sm ring-1 ring-slate-900/5">
                 <div>
                     <x-input-label for="product_id" :value="__('Product')" />
-                    <select id="product_id" name="product_id" class="mt-1 block border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                    <select id="product_id" name="product_id" class="mt-1 block border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                         <option value="">{{ __('All') }}</option>
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}" @selected(request('product_id') == $product->id)>{{ $product->name }}</option>
@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <x-input-label for="warehouse_id" :value="__('Warehouse')" />
-                    <select id="warehouse_id" name="warehouse_id" class="mt-1 block border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                    <select id="warehouse_id" name="warehouse_id" class="mt-1 block border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                         <option value="">{{ __('All') }}</option>
                         @foreach ($warehouses as $warehouse)
                             <option value="{{ $warehouse->id }}" @selected(request('warehouse_id') == $warehouse->id)>{{ $warehouse->name }}</option>
@@ -26,7 +26,7 @@
                 </div>
                 <div>
                     <x-input-label for="type" :value="__('Type')" />
-                    <select id="type" name="type" class="mt-1 block border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                    <select id="type" name="type" class="mt-1 block border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                         <option value="">{{ __('All') }}</option>
                         @foreach ($types as $value => $label)
                             <option value="{{ $value }}" @selected(request('type') === $value)>{{ $label }}</option>

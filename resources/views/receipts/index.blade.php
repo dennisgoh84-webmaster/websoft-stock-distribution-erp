@@ -15,7 +15,7 @@
             <form method="GET" class="flex flex-wrap gap-3 items-end bg-white p-4 rounded-lg shadow-sm ring-1 ring-slate-900/5">
                 <div>
                     <x-input-label for="customer_id" :value="__('Customer')" />
-                    <select id="customer_id" name="customer_id" class="mt-1 block border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                    <select id="customer_id" name="customer_id" class="mt-1 block border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                         <option value="">{{ __('All') }}</option>
                         @foreach ($customers as $customer)
                             <option value="{{ $customer->id }}" @selected(request('customer_id') == $customer->id)>{{ $customer->name }}</option>

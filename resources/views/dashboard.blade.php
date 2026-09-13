@@ -8,7 +8,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl p-6">
                     <div class="flex items-start gap-4">
-                        <span class="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 shrink-0">
+                        <span class="flex items-center justify-center w-10 h-10 rounded-lg bg-amber-50 text-amber-600 shrink-0">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
                             </svg>
@@ -30,7 +30,7 @@
                         <div>
                             <div class="text-sm text-slate-500">{{ __('Pending Purchase Orders') }}</div>
                             <div class="text-2xl font-semibold text-slate-900">{{ $pendingPurchaseOrders }}</div>
-                            <a href="{{ route('purchase-orders.index') }}" class="text-xs text-indigo-600 hover:underline">{{ __('View all') }}</a>
+                            <a href="{{ route('purchase-orders.index') }}" class="text-xs text-amber-700 hover:underline">{{ __('View all') }}</a>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                         <div>
                             <div class="text-sm text-slate-500">{{ __('Pending Sales Orders') }}</div>
                             <div class="text-2xl font-semibold text-slate-900">{{ $pendingSalesOrders }}</div>
-                            <a href="{{ route('sales-orders.index') }}" class="text-xs text-indigo-600 hover:underline">{{ __('View all') }}</a>
+                            <a href="{{ route('sales-orders.index') }}" class="text-xs text-amber-700 hover:underline">{{ __('View all') }}</a>
                         </div>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                 <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
                     <div class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-900 flex justify-between items-center">
                         {{ __('Low Stock Products') }}
-                        <a href="{{ route('products.index') }}" class="text-xs text-indigo-600 hover:underline font-normal">{{ __('View all products') }}</a>
+                        <a href="{{ route('products.index') }}" class="text-xs text-amber-700 hover:underline font-normal">{{ __('View all products') }}</a>
                     </div>
                     <table class="app-table min-w-full divide-y divide-slate-200">
                         <thead class="bg-slate-50">
@@ -83,7 +83,7 @@
                                     <td class="px-6 py-3 text-sm text-slate-900">
                                         <a href="{{ route('products.show', $product) }}" class="hover:underline">{{ $product->name }}</a>
                                     </td>
-                                    <td class="px-6 py-3 text-sm text-red-600 font-semibold text-right">{{ $product->totalStock() }}</td>
+                                    <td class="px-6 py-3 text-sm text-right"><x-stock-level :product="$product" /></td>
                                     <td class="px-6 py-3 text-sm text-slate-500 text-right">{{ $product->reorder_level }}</td>
                                 </tr>
                             @empty
@@ -98,7 +98,7 @@
                 <div class="bg-white overflow-hidden shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
                     <div class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-900 flex justify-between items-center">
                         {{ __('Outstanding Invoices') }}
-                        <a href="{{ route('invoices.index') }}" class="text-xs text-indigo-600 hover:underline font-normal">{{ __('View all invoices') }}</a>
+                        <a href="{{ route('invoices.index') }}" class="text-xs text-amber-700 hover:underline font-normal">{{ __('View all invoices') }}</a>
                     </div>
                     <table class="app-table min-w-full divide-y divide-slate-200">
                         <thead class="bg-slate-50">

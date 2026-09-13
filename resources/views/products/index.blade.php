@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-slate-900 leading-tight tracking-tight">{{ __('Products') }}</h2>
-            <a href="{{ route('products.create') }}" class="inline-flex items-center gap-x-1.5 px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white shadow-sm hover:bg-indigo-500 transition ease-in-out duration-150">
+            <a href="{{ route('products.create') }}" class="inline-flex items-center gap-x-1.5 px-4 py-2 bg-amber-600 border border-transparent rounded-lg font-semibold text-sm text-white shadow-sm hover:bg-amber-700 transition ease-in-out duration-150">
                 {{ __('New Product') }}
             </a>
         </div>
@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <x-input-label for="category_id" :value="__('Category')" />
-                    <select id="category_id" name="category_id" class="mt-1 block border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                    <select id="category_id" name="category_id" class="mt-1 block border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                         <option value="">{{ __('All') }}</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
@@ -52,12 +52,10 @@
                                 <td class="px-6 py-4 text-sm text-slate-500">{{ $product->category?->name ?? '—' }}</td>
                                 <td class="px-6 py-4 text-sm text-slate-900 text-right">{{ number_format($product->selling_price, 2) }}</td>
                                 <td class="px-6 py-4 text-sm text-right">
-                                    <span class="{{ $product->isLowStock() ? 'text-red-600 font-semibold' : 'text-slate-900' }}">
-                                        {{ $product->totalStock() }}
-                                    </span>
+                                    <x-stock-level :product="$product" />
                                 </td>
                                 <td class="px-6 py-4 text-right text-sm space-x-3">
-                                    <a href="{{ route('products.edit', $product) }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                                    <a href="{{ route('products.edit', $product) }}" class="text-amber-700 hover:text-amber-900">{{ __('Edit') }}</a>
                                 </td>
                             </tr>
                         @empty

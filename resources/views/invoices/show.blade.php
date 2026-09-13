@@ -25,7 +25,7 @@
             </div>
 
             @if ($invoice->source)
-                <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 text-sm">
+                <div class="bg-amber-50 border border-amber-100 rounded-lg p-4 text-sm">
                     {{ __('Generated from') }}
                     @if ($invoice->type === 'sales')
                         <a href="{{ route('sales-orders.show', $invoice->source) }}" class="font-semibold hover:underline">{{ $invoice->source->so_number }}</a>
@@ -149,9 +149,9 @@
                         <span class="text-xs text-slate-500">
                             {{ __('Settling this from money already recorded, or across several invoices?') }}
                             @if ($invoice->type === 'sales')
-                                <a href="{{ route('receipts.index') }}" class="text-indigo-600 hover:underline">{{ __('Use Receipts') }}</a>
+                                <a href="{{ route('receipts.index') }}" class="text-amber-700 hover:underline">{{ __('Use Receipts') }}</a>
                             @else
-                                <a href="{{ route('payment-vouchers.index') }}" class="text-indigo-600 hover:underline">{{ __('Use Payment Vouchers') }}</a>
+                                <a href="{{ route('payment-vouchers.index') }}" class="text-amber-700 hover:underline">{{ __('Use Payment Vouchers') }}</a>
                             @endif
                         </span>
                     </div>
@@ -168,7 +168,7 @@
                         </div>
                         <div>
                             <x-input-label for="method" :value="__('Method')" />
-                            <select id="method" name="method" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                            <select id="method" name="method" class="mt-1 block w-full border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">
                                 <option value="cash">{{ __('Cash') }}</option>
                                 <option value="bank_transfer">{{ __('Bank Transfer') }}</option>
                                 <option value="cheque">{{ __('Cheque') }}</option>

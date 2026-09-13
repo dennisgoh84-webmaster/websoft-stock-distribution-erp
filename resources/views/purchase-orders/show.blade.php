@@ -24,7 +24,7 @@
             </div>
 
             @if ($purchaseOrder->invoice)
-                <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 text-sm flex justify-between items-center">
+                <div class="bg-amber-50 border border-amber-100 rounded-lg p-4 text-sm flex justify-between items-center">
                     <span>{{ __('Invoice') }} <a href="{{ route('invoices.show', $purchaseOrder->invoice) }}" class="font-semibold hover:underline">{{ $purchaseOrder->invoice->invoice_number }}</a> {{ __('has been generated for this order.') }}</span>
                     <x-status-badge :status="$purchaseOrder->invoice->status" />
                 </div>
@@ -58,7 +58,7 @@
                                     @if (in_array($purchaseOrder->status, [\App\Models\PurchaseOrder::STATUS_ORDERED, \App\Models\PurchaseOrder::STATUS_PARTIALLY_RECEIVED]))
                                         <td class="px-6 py-4 text-right">
                                             @if ($item->remainingQuantity() > 0)
-                                                <input type="number" min="0" max="{{ $item->remainingQuantity() }}" name="quantities[{{ $item->id }}]" value="0" class="w-24 text-right border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-sm">
+                                                <input type="number" min="0" max="{{ $item->remainingQuantity() }}" name="quantities[{{ $item->id }}]" value="0" class="w-24 text-right border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm text-sm">
                                             @else
                                                 <span class="text-xs text-slate-400">{{ __('complete') }}</span>
                                             @endif

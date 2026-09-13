@@ -12,7 +12,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <x-input-label for="from_warehouse_id" :value="__('From Warehouse')" />
-                            <select id="from_warehouse_id" name="from_warehouse_id" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm" required>
+                            <select id="from_warehouse_id" name="from_warehouse_id" class="mt-1 block w-full border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm" required>
                                 <option value="">{{ __('Select warehouse') }}</option>
                                 @foreach ($warehouses as $warehouse)
                                     <option value="{{ $warehouse->id }}" @selected(old('from_warehouse_id') == $warehouse->id)>{{ $warehouse->name }}</option>
@@ -23,7 +23,7 @@
 
                         <div>
                             <x-input-label for="to_warehouse_id" :value="__('To Warehouse')" />
-                            <select id="to_warehouse_id" name="to_warehouse_id" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm" required>
+                            <select id="to_warehouse_id" name="to_warehouse_id" class="mt-1 block w-full border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm" required>
                                 <option value="">{{ __('Select warehouse') }}</option>
                                 @foreach ($warehouses as $warehouse)
                                     <option value="{{ $warehouse->id }}" @selected(old('to_warehouse_id') == $warehouse->id)>{{ $warehouse->name }}</option>
@@ -41,7 +41,7 @@
 
                     <div>
                         <x-input-label for="notes" :value="__('Notes')" />
-                        <textarea id="notes" name="notes" rows="2" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">{{ old('notes') }}</textarea>
+                        <textarea id="notes" name="notes" rows="2" class="mt-1 block w-full border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm">{{ old('notes') }}</textarea>
                     </div>
 
                     <div>
@@ -64,7 +64,7 @@
                                 <template x-for="(item, index) in items" :key="index">
                                     <tr class="border-t">
                                         <td class="px-3 py-2">
-                                            <select :name="'items['+index+'][product_id]'" x-model="item.product_id" class="block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-sm" required>
+                                            <select :name="'items['+index+'][product_id]'" x-model="item.product_id" class="block w-full border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm text-sm" required>
                                                 <option value="">{{ __('Select product') }}</option>
                                                 <template x-for="product in products" :key="product.id">
                                                     <option :value="product.id" x-text="product.name + ' (' + product.sku + ')'"></option>
@@ -72,7 +72,7 @@
                                             </select>
                                         </td>
                                         <td class="px-3 py-2">
-                                            <input type="number" min="1" :name="'items['+index+'][quantity]'" x-model.number="item.quantity" class="block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-sm text-right" required>
+                                            <input type="number" min="1" :name="'items['+index+'][quantity]'" x-model.number="item.quantity" class="block w-full border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm text-sm text-right" required>
                                         </td>
                                         <td class="px-3 py-2 text-center">
                                             <button type="button" @click="removeItem(index)" class="text-red-500 hover:text-red-700">&times;</button>

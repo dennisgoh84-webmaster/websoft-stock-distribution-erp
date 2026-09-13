@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-slate-900 leading-tight tracking-tight">{{ __('Customers') }}</h2>
-            <a href="{{ route('customers.create') }}" class="inline-flex items-center gap-x-1.5 px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white shadow-sm hover:bg-indigo-500 transition ease-in-out duration-150">
+            <a href="{{ route('customers.create') }}" class="inline-flex items-center gap-x-1.5 px-4 py-2 bg-amber-600 border border-transparent rounded-lg font-semibold text-sm text-white shadow-sm hover:bg-amber-700 transition ease-in-out duration-150">
                 {{ __('New Customer') }}
             </a>
         </div>
@@ -39,7 +39,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-right text-sm space-x-3">
-                                    <a href="{{ route('customers.edit', $customer) }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                                    <a href="{{ route('customers.edit', $customer) }}" class="text-amber-700 hover:text-amber-900">{{ __('Edit') }}</a>
                                     <form method="POST" action="{{ route('customers.destroy', $customer) }}" class="inline" onsubmit="return confirm('Delete this customer?');">
                                         @csrf
                                         @method('DELETE')

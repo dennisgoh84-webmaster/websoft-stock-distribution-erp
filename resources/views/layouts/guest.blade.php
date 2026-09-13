@@ -15,18 +15,18 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-slate-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-slate-50">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 px-4 bg-slate-900">
             <div class="flex flex-col items-center gap-3">
-                <a href="/" class="flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-600/20">
+                <a href="/" class="flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-600 shadow-lg shadow-amber-900/30">
                     <x-application-logo class="w-8 h-8 text-white" />
                 </a>
                 <div class="text-center">
-                    <div class="font-bold text-lg text-slate-900 tracking-tight">{{ __('Websoft') }}</div>
-                    <div class="text-xs text-slate-500">{{ __('Stock Distribution ERP') }}</div>
+                    <div class="font-bold text-lg text-white tracking-tight">{{ __('Websoft') }}</div>
+                    <div class="text-xs text-slate-400">{{ __('Stock Distribution ERP') }}</div>
                 </div>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-sm ring-1 ring-slate-900/5 overflow-hidden sm:rounded-xl">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-xl shadow-slate-950/40 overflow-hidden rounded-xl">
                 {{ $slot }}
             </div>
         </div>
